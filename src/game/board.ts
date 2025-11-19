@@ -8,7 +8,16 @@ export type BoardState = Record<Square, Piece | null>
 
 type PiecePool = Record<PieceType, Piece[]>
 
-const BACK_RANK_ORDER: PieceType[] = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook']
+const BACK_RANK_ORDER: PieceType[] = [
+  'rook',
+  'knight',
+  'bishop',
+  'queen',
+  'king',
+  'bishop',
+  'knight',
+  'rook',
+]
 
 function createPiecePool(configs: typeof fireTeam | typeof waterTeam): PiecePool {
   const pool: PiecePool = {

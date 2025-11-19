@@ -1,6 +1,7 @@
 import Board from './components/Board'
 import GameSidebar from './components/GameSidebar'
 import { useGameState } from './game/useGameState'
+import VictoryModal from './components/VictoryModal'
 import './App.css'
 
 function App() {
@@ -24,8 +25,8 @@ function App() {
           <h1>Fire vs Water Pokémon Chess</h1>
         </div>
         <p className="banner-copy">
-          Classic chess rules with a starter rivalry twist. Command Charizard&apos;s fire squad against Blastoise&apos;s
-          tide and claim the board.
+          Classic chess rules with a starter rivalry twist. Command Charizard&apos;s fire squad
+          against Blastoise&apos;s tide and claim the board.
         </p>
       </header>
 
@@ -44,6 +45,8 @@ function App() {
           onReset={reset}
         />
       </main>
+
+      {winner && <VictoryModal winner={winner} onReset={reset} />}
     </div>
   )
 }

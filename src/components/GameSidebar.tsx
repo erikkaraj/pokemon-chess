@@ -10,7 +10,13 @@ interface GameSidebarProps {
   onReset: () => void
 }
 
-const GameSidebar: FC<GameSidebarProps> = ({ activeElement, capturedPieces, moveHistory, winner, onReset }) => {
+const GameSidebar: FC<GameSidebarProps> = ({
+  activeElement,
+  capturedPieces,
+  moveHistory,
+  winner,
+  onReset,
+}) => {
   const theme = teamTheme[winner ?? activeElement]
   return (
     <aside className="sidebar">
@@ -59,7 +65,9 @@ const GameSidebar: FC<GameSidebarProps> = ({ activeElement, capturedPieces, move
               .reverse()
               .map((move, index) => (
                 <li key={`${move.from}-${move.to}-${index}`}>
-                  <span style={{ color: teamTheme[move.piece.element].color }}>{move.piece.pokemon.icon}</span>
+                  <span style={{ color: teamTheme[move.piece.element].color }}>
+                    {move.piece.pokemon.icon}
+                  </span>
                   {` ${move.from} → ${move.to}`}
                   {move.captured ? ` × ${move.captured.name}` : ''}
                 </li>

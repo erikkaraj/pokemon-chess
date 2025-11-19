@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { BoardState, createInitialBoard } from './board'
-import { getLegalMoves } from './moves'
+import { getLegalMoves, hasAnyLegalMoves, isElementInCheck } from './moves'
 import { Element, MoveRecord, Piece, Square } from '../types/chess'
 
 const TURN_ORDER: Element[] = ['fire', 'water']
@@ -61,17 +61,25 @@ export function useGameState(): GameState {
     const captured = board[to] ?? undefined
     const updatedPiece: Piece = { ...piece, hasMoved: true }
 
-    setBoard((current) => {
-      const nextBoard: BoardState = { ...current }
-      nextBoard[from] = null
-      nextBoard[to] = updatedPiece
-      return nextBoard
-    })
+    const nextBoard: BoardState = { ...board }
+    nextBoard[from] = null
+    nextBoard[to] = updatedPiece
 
+    setBoard(nextBoard)
     setMoveHistory((current) => [...current, { from, to, piece: updatedPiece, captured }])
 
     const capturedKing = captured?.type === 'king'
     if (capturedKing) {
+      setWinner(piece.element)
+      clearSelection()
+      return
+    }
+
+    const opponent = piece.element === 'fire' ? 'water' : 'fire'
+    const opponentHasMoves = hasAnyLegalMoves(nextBoard, opponent)
+    const opponentInCheck = isElementInCheck(nextBoard, opponent)
+
+    if (!opponentHasMoves && opponentInCheck) {
       setWinner(piece.element)
       clearSelection()
       return

@@ -152,7 +152,9 @@ export function getPseudoLegalMoves(args: MoveGeneratorArgs) {
 
 export function getLegalMoves(args: MoveGeneratorArgs & { board: BoardState }) {
   const pseudoMoves = getPseudoLegalMoves(args)
-  return pseudoMoves.filter((targetSquare) => !wouldExposeKing(args.board, args.from, targetSquare, args.piece))
+  return pseudoMoves.filter(
+    (targetSquare) => !wouldExposeKing(args.board, args.from, targetSquare, args.piece),
+  )
 }
 
 function wouldExposeKing(board: BoardState, from: Square, to: Square, movingPiece: Piece) {
@@ -161,7 +163,8 @@ function wouldExposeKing(board: BoardState, from: Square, to: Square, movingPiec
   nextBoard[from] = null
   nextBoard[to] = updatedPiece
 
-  const kingSquare = movingPiece.type === 'king' ? to : findKingSquare(nextBoard, movingPiece.element)
+  const kingSquare =
+    movingPiece.type === 'king' ? to : findKingSquare(nextBoard, movingPiece.element)
   if (!kingSquare) return false
 
   const opponent = getOpponentElement(movingPiece.element)
@@ -233,4 +236,22 @@ function pieceVectorsToSquares(from: Square, vectors: Array<[number, number]>) {
     }
   })
   return moves
+}
+
+export function isElementInCheck(board: BoardState, element: Element): boolean {
+  const kingSquare = findKingSquare(board, element)
+  if (!kingSquare) return false
+  const opponent = getOpponentElement(element)
+  return isSquareUnderAttack(board, kingSquare, opponent)
+}
+
+export function hasAnyLegalMoves(board: BoardState, element: Element): boolean {
+  for (const [square, piece] of Object.entries(board) as [Square, Piece | null][]) {
+    if (!piece || piece.element !== element) continue
+    const moves = getLegalMoves({ board, piece, from: square })
+    if (moves.length) {
+      return true
+    }
+  }
+  return false
 }

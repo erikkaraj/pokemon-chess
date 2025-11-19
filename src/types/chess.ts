@@ -9,6 +9,7 @@ export type Square = `${BoardFile}${BoardRank}`
 export interface PokemonMetadata {
   readonly species: string
   readonly icon: string
+  readonly image?: string
 }
 
 export interface Piece {
