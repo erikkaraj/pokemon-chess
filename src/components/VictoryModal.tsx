@@ -5,9 +5,10 @@ import { teamTheme } from '../data/pokemon'
 interface VictoryModalProps {
   winner: Element
   onReset: () => void
+  onChangeTeams?: () => void
 }
 
-const VictoryModal: FC<VictoryModalProps> = ({ winner, onReset }) => {
+const VictoryModal: FC<VictoryModalProps> = ({ winner, onReset, onChangeTeams }) => {
   const theme = teamTheme[winner]
   return (
     <div className="victory-overlay">
@@ -18,9 +19,16 @@ const VictoryModal: FC<VictoryModalProps> = ({ winner, onReset }) => {
           The {theme.label.toLowerCase()} commander has captured the opposing king. Ready for a
           rematch?
         </p>
-        <button className="reset-button" onClick={onReset}>
-          Start New Duel
-        </button>
+        <div className="sidebar-actions">
+          <button className="reset-button" onClick={onReset}>
+            Start New Duel
+          </button>
+          {onChangeTeams && (
+            <button className="secondary-button" onClick={onChangeTeams}>
+              Choose Different Teams
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

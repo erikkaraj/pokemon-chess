@@ -1,7 +1,9 @@
 import Board from './components/Board'
 import GameSidebar from './components/GameSidebar'
+import TeamSelector from './components/TeamSelector'
 import { useGameState } from './game/useGameState'
 import VictoryModal from './components/VictoryModal'
+import { teamTheme } from './data/pokemon'
 import './App.css'
 
 function App() {
@@ -13,40 +15,59 @@ function App() {
     moveHistory,
     capturedPieces,
     winner,
+    playerTeam,
+    opponentTeam,
+    gameReady,
+    selectTeam,
+    changeTeams,
     reset,
     handleSquareClick,
   } = useGameState()
+
+  const title =
+    gameReady && playerTeam && opponentTeam
+      ? `${teamTheme[playerTeam].label} vs ${teamTheme[opponentTeam].label}`
+      : 'Elemental Pokémon Chess'
+
+  const subtitle =
+    gameReady && playerTeam && opponentTeam
+      ? `Command your ${teamTheme[playerTeam].label} team and overcome a ${teamTheme[opponentTeam].label} rival squad.`
+      : 'Pick your elemental squad. The rival will be chosen at random from the remaining types.'
 
   return (
     <div className="app">
       <header className="banner">
         <div>
           <p className="eyebrow">Legendary Showdown</p>
-          <h1>Fire vs Water Pokémon Chess</h1>
+          <h1>{title}</h1>
         </div>
-        <p className="banner-copy">
-          Classic chess rules with a starter rivalry twist. Command Charizard&apos;s fire squad
-          against Blastoise&apos;s tide and claim the board.
-        </p>
+        <p className="banner-copy">{subtitle}</p>
       </header>
 
-      <main className="game-layout">
-        <Board
-          board={board}
-          selectedSquare={selectedSquare}
-          legalMoves={legalMoves}
-          onSquareClick={handleSquareClick}
-        />
-        <GameSidebar
-          activeElement={activeElement}
-          capturedPieces={capturedPieces}
-          moveHistory={moveHistory}
-          winner={winner}
-          onReset={reset}
-        />
-      </main>
+      {gameReady ? (
+        <main className="game-layout">
+          <Board
+            board={board}
+            selectedSquare={selectedSquare}
+            legalMoves={legalMoves}
+            onSquareClick={handleSquareClick}
+          />
+          <GameSidebar
+            activeElement={activeElement}
+            capturedPieces={capturedPieces}
+            moveHistory={moveHistory}
+            winner={winner}
+            playerTeam={playerTeam}
+            opponentTeam={opponentTeam}
+            onReset={reset}
+            onChangeTeams={changeTeams}
+          />
+        </main>
+      ) : (
+        <TeamSelector onSelect={selectTeam} />
+      )}
 
-      {winner && <VictoryModal winner={winner} onReset={reset} />}
+      {winner && <VictoryModal winner={winner} onReset={reset} onChangeTeams={changeTeams} />}
     </div>
   )
 }

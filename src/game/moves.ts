@@ -105,8 +105,8 @@ const singleStepMoves: MoveGenerator = ({ board, from, piece }) => {
 const pawnMoves: MoveGenerator = ({ board, from, piece }) => {
   const moves: Square[] = []
   const { fileIndex, rankIndex } = squareToCoords(from)
-  const direction = piece.element === 'fire' ? 1 : -1
-  const startRank = piece.element === 'fire' ? 1 : 6
+  const direction = piece.side === 'south' ? 1 : -1
+  const startRank = piece.side === 'south' ? 1 : 6
 
   const oneStep = coordsToSquare(fileIndex, rankIndex + direction)
   if (oneStep && !board[oneStep]) {
@@ -151,10 +151,15 @@ export function getPseudoLegalMoves(args: MoveGeneratorArgs) {
 }
 
 export function getLegalMoves(args: MoveGeneratorArgs & { board: BoardState }) {
-  const pseudoMoves = getPseudoLegalMoves(args)
-  return pseudoMoves.filter(
+  let legalMoves = getPseudoLegalMoves(args).filter(
     (targetSquare) => !wouldExposeKing(args.board, args.from, targetSquare, args.piece),
   )
+
+  if (args.piece.type === 'king') {
+    legalMoves = [...legalMoves, ...getCastleMoves(args.board, args.from, args.piece)]
+  }
+
+  return legalMoves
 }
 
 function wouldExposeKing(board: BoardState, from: Square, to: Square, movingPiece: Piece) {
@@ -167,7 +172,7 @@ function wouldExposeKing(board: BoardState, from: Square, to: Square, movingPiec
     movingPiece.type === 'king' ? to : findKingSquare(nextBoard, movingPiece.element)
   if (!kingSquare) return false
 
-  const opponent = getOpponentElement(movingPiece.element)
+  const opponent = getOpponentElement(nextBoard, movingPiece.element)
   return isSquareUnderAttack(nextBoard, kingSquare, opponent)
 }
 
@@ -179,8 +184,13 @@ function findKingSquare(board: BoardState, element: Element): Square | null {
   )
 }
 
-function getOpponentElement(element: Element): Element {
-  return element === 'fire' ? 'water' : 'fire'
+function getOpponentElement(board: BoardState, element: Element): Element {
+  for (const piece of Object.values(board)) {
+    if (piece && piece.element !== element) {
+      return piece.element
+    }
+  }
+  return element
 }
 
 function isSquareUnderAttack(board: BoardState, targetSquare: Square, attackerElement: Element) {
@@ -192,6 +202,59 @@ function isSquareUnderAttack(board: BoardState, targetSquare: Square, attackerEl
     }
   }
   return false
+}
+
+function getCastleMoves(board: BoardState, from: Square, king: Piece) {
+  const moves: Square[] = []
+  if (king.hasMoved) return moves
+
+  const opponent = getOpponentElement(board, king.element)
+  if (isSquareUnderAttack(board, from, opponent)) return moves
+
+  ;[-1, 1].forEach((direction) => {
+    const rookSquare = findCastleRook(board, from, king, direction)
+    if (!rookSquare) return
+
+    const { fileIndex, rankIndex } = squareToCoords(from)
+    const firstStep = coordsToSquare(fileIndex + direction, rankIndex)
+    const secondStep = coordsToSquare(fileIndex + direction * 2, rankIndex)
+    if (!firstStep || !secondStep) return
+    if (board[firstStep] || board[secondStep]) return
+
+    if (
+      isSquareUnderAttack(board, firstStep, opponent) ||
+      isSquareUnderAttack(board, secondStep, opponent)
+    ) {
+      return
+    }
+
+    moves.push(secondStep)
+  })
+
+  return moves
+}
+
+function findCastleRook(board: BoardState, from: Square, king: Piece, direction: number) {
+  const { fileIndex, rankIndex } = squareToCoords(from)
+  let currentFile = fileIndex + direction
+  while (true) {
+    const square = coordsToSquare(currentFile, rankIndex)
+    if (!square) break
+    const occupant = board[square]
+    if (occupant) {
+      if (
+        occupant.type === 'rook' &&
+        occupant.element === king.element &&
+        occupant.side === king.side &&
+        !occupant.hasMoved
+      ) {
+        return square
+      }
+      break
+    }
+    currentFile += direction
+  }
+  return null
 }
 
 function getAttackSquares(board: BoardState, from: Square, piece: Piece): Square[] {
@@ -213,7 +276,7 @@ function getAttackSquares(board: BoardState, from: Square, piece: Piece): Square
 function pawnAttackSquares(from: Square, piece: Piece): Square[] {
   const attacks: Square[] = []
   const { fileIndex, rankIndex } = squareToCoords(from)
-  const direction = piece.element === 'fire' ? 1 : -1
+  const direction = piece.side === 'south' ? 1 : -1
   ;[
     [-1, direction],
     [1, direction],
@@ -241,7 +304,7 @@ function pieceVectorsToSquares(from: Square, vectors: Array<[number, number]>) {
 export function isElementInCheck(board: BoardState, element: Element): boolean {
   const kingSquare = findKingSquare(board, element)
   if (!kingSquare) return false
-  const opponent = getOpponentElement(element)
+  const opponent = getOpponentElement(board, element)
   return isSquareUnderAttack(board, kingSquare, opponent)
 }
 

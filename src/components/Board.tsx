@@ -34,7 +34,11 @@ const Board: FC<BoardProps> = ({ board, selectedSquare, legalMoves, onSquareClic
                 {piece ? (
                   <div className="piece" style={{ borderColor: teamTheme[piece.element].color }}>
                     {piece.pokemon.image ? (
-                      <img src={piece.pokemon.image} alt={piece.name} className="piece-image" />
+                      <img
+                        src={piece.pokemon.image}
+                        alt={piece.name}
+                        className={`piece-image ${piece.type === 'pawn' ? 'piece-image--pawn' : ''}`}
+                      />
                     ) : (
                       <span className="piece-icon">{piece.pokemon.icon}</span>
                     )}

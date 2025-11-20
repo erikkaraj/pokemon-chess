@@ -1,10 +1,29 @@
-export type Element = 'fire' | 'water'
+export type Element =
+  | 'fire'
+  | 'water'
+  | 'grass'
+  | 'electric'
+  | 'ice'
+  | 'rock'
+  | 'ground'
+  | 'flying'
+  | 'psychic'
+  | 'ghost'
+  | 'dark'
+  | 'steel'
+  | 'dragon'
+  | 'fairy'
+  | 'bug'
+  | 'fighting'
+  | 'poison'
+  | 'normal'
 
 export type PieceType = 'king' | 'queen' | 'rook' | 'bishop' | 'knight' | 'pawn'
 
 export type BoardFile = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h'
 export type BoardRank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 export type Square = `${BoardFile}${BoardRank}`
+export type Side = 'south' | 'north'
 
 export interface PokemonMetadata {
   readonly species: string
@@ -17,6 +36,7 @@ export interface Piece {
   readonly name: string
   readonly type: PieceType
   readonly element: Element
+  side: Side
   readonly pokemon: PokemonMetadata
   hasMoved: boolean
 }

@@ -1,5 +1,5 @@
-import { fireTeam, waterTeam, cloneConfig } from '../data/pokemon'
-import { BoardFile, BoardRank, Piece, PieceType, Square } from '../types/chess'
+import { buildTeamRoster, cloneConfig, PokemonPieceConfig } from '../data/pokemon'
+import { BoardFile, BoardRank, Element, Piece, PieceType, Side, Square } from '../types/chess'
 
 export const BOARD_FILES: BoardFile[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 export const BOARD_RANKS: BoardRank[] = [8, 7, 6, 5, 4, 3, 2, 1]
@@ -19,7 +19,7 @@ const BACK_RANK_ORDER: PieceType[] = [
   'rook',
 ]
 
-function createPiecePool(configs: typeof fireTeam | typeof waterTeam): PiecePool {
+function createPiecePool(configs: PokemonPieceConfig[]): PiecePool {
   const pool: PiecePool = {
     king: [],
     queen: [],
@@ -28,7 +28,7 @@ function createPiecePool(configs: typeof fireTeam | typeof waterTeam): PiecePool
     knight: [],
     pawn: [],
   }
-
+  buildTeamRoster
   configs.forEach((config, index) => {
     const piece = cloneConfig(config, index)
     pool[piece.type].push({ ...piece })
@@ -45,7 +45,7 @@ function takePiece(pool: PiecePool, type: PieceType) {
   return bucket.shift()!
 }
 
-function createEmptyBoard(): BoardState {
+export function createEmptyBoard(): BoardState {
   const board = {} as BoardState
   BOARD_FILES.forEach((file) => {
     BOARD_RANKS.forEach((rank) => {
@@ -56,26 +56,30 @@ function createEmptyBoard(): BoardState {
   return board
 }
 
-export function createInitialBoard(): BoardState {
+export function createInitialBoard(southTeam: Element, northTeam: Element): BoardState {
   const board = createEmptyBoard()
 
-  const firePool = createPiecePool(fireTeam)
-  const waterPool = createPiecePool(waterTeam)
+  const southPool = createPiecePool(buildTeamRoster(southTeam))
+  const northPool = createPiecePool(buildTeamRoster(northTeam))
 
   BOARD_FILES.forEach((file) => {
-    board[`${file}2` as Square] = takePiece(firePool, 'pawn')
-    board[`${file}7` as Square] = takePiece(waterPool, 'pawn')
+    board[`${file}2` as Square] = withSide(takePiece(southPool, 'pawn'), 'south')
+    board[`${file}7` as Square] = withSide(takePiece(northPool, 'pawn'), 'north')
   })
 
   BOARD_FILES.forEach((file, index) => {
-    const fireSquare = `${file}1` as Square
-    const waterSquare = `${file}8` as Square
+    const southSquare = `${file}1` as Square
+    const northSquare = `${file}8` as Square
     const type = BACK_RANK_ORDER[index]
-    board[fireSquare] = takePiece(firePool, type)
-    board[waterSquare] = takePiece(waterPool, type)
+    board[southSquare] = withSide(takePiece(southPool, type), 'south')
+    board[northSquare] = withSide(takePiece(northPool, type), 'north')
   })
 
   return board
+}
+
+function withSide(piece: Piece, side: Side): Piece {
+  return { ...piece, side }
 }
 
 export function cloneBoard(board: BoardState): BoardState {
