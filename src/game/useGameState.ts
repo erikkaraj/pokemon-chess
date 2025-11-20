@@ -276,17 +276,12 @@ export function useGameState(): GameState {
       hasMoved: true,
     }
 
-    setBoard((current) => {
-      const updatedBoard: BoardState = { ...current }
-      updatedBoard[pendingPromotion.square] = promotedPiece
-      finalizeMove(
-        updatedBoard,
-        promotedPiece,
-        pendingPromotion.opponent,
-        pendingPromotion.enPassantTarget,
-      )
-      return updatedBoard
-    })
+    const updatedBoard: BoardState = {
+      ...board,
+      [pendingPromotion.square]: promotedPiece,
+    }
+
+    setBoard(updatedBoard)
 
     setMoveHistory((current) => {
       if (!current.length) return current
@@ -299,6 +294,7 @@ export function useGameState(): GameState {
       return updated
     })
 
+    finalizeMove(updatedBoard, promotedPiece, pendingPromotion.opponent, pendingPromotion.enPassantTarget)
     setPendingPromotion(null)
   }
 

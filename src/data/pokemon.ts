@@ -16,137 +16,8 @@ const PIECE_TEMPLATE: Array<{ type: PieceType; count: number }> = [
   { type: 'pawn', count: 8 },
 ]
 
-//fire team sprites
-const charizardSprite = new URL('../assets/pokemon/Charizard.png', import.meta.url).href
-const delphoxSprite = new URL('../assets/pokemon/Delphox.png', import.meta.url).href
-const blazikenSprite = new URL('../assets/pokemon/Blaziken.png', import.meta.url).href
-const infernapeSprite = new URL('../assets/pokemon/Infernape.png', import.meta.url).href
-const emboarSprite = new URL('../assets/pokemon/Emboar.png', import.meta.url).href
-const growlitheSprite = new URL('../assets/pokemon/Growlithe.png', import.meta.url).href
-//water team sprites
-const blastoiseSprite = new URL('../assets/pokemon/Blastoise.png', import.meta.url).href
-const primarinaSprite = new URL('../assets/pokemon/Primarina.png', import.meta.url).href
-const greninjaSprite = new URL('../assets/pokemon/Greninja.png', import.meta.url).href
-const feraligatrSprite = new URL('../assets/pokemon/Feraligatr.png', import.meta.url).href
-const empoleonSprite = new URL('../assets/pokemon/Empoleon.png', import.meta.url).href
-const marillSprite = new URL('../assets/pokemon/Marill.png', import.meta.url).href
-//grass team sprites
-const venusaurSprite = new URL('../assets/pokemon/Venusaur.png', import.meta.url).href
-const meganiumSprite = new URL('../assets/pokemon/Meganium.png', import.meta.url).href
-const cacturneSprite = new URL('../assets/pokemon/Cacturne.png', import.meta.url).href
-const sceptileSprite = new URL('../assets/pokemon/Sceptile.png', import.meta.url).href
-const gogoatSprite = new URL('../assets/pokemon/Gogoat.png', import.meta.url).href
-const shroomishSprite = new URL('../assets/pokemon/Shroomish.png', import.meta.url).href
-//electric team sprites
-const electivireSprite = new URL('../assets/pokemon/Electivire.png', import.meta.url).href
-const zeraoraSprite = new URL('../assets/pokemon/Zeraora.png', import.meta.url).href
-const eelektrossSprite = new URL('../assets/pokemon/Eelektross.png', import.meta.url).href
-const jolteonSprite = new URL('../assets/pokemon/Jolteon.png', import.meta.url).href
-const ampharosSprite = new URL('../assets/pokemon/Ampharos.png', import.meta.url).href
-const pichuSprite = new URL('../assets/pokemon/Pichu.png', import.meta.url).href
-
-//ice team sprites
-const bearticSprite = new URL('../assets/pokemon/Beartic.png', import.meta.url).href
-const regiceSprite = new URL('../assets/pokemon/Regice.png', import.meta.url).href
-const glalieSprite = new URL('../assets/pokemon/Glalie.png', import.meta.url).href
-const glastrierSprite = new URL('../assets/pokemon/Glastrier.png', import.meta.url).href
-const avaluggSprite = new URL('../assets/pokemon/Avalugg.png', import.meta.url).href
-const vanilliteSprite = new URL('../assets/pokemon/Vanillite.png', import.meta.url).href
-//rock team sprites
-const TyranitarSprite = new URL('../assets/pokemon/Tyranitar.png', import.meta.url).href
-const RegirockSprite = new URL('../assets/pokemon/Regirock.png', import.meta.url).href
-const sudowoodoSprite = new URL('../assets/pokemon/Sudowoodo.png', import.meta.url).href
-const lycanrocSprite = new URL('../assets/pokemon/Lycanroc.png', import.meta.url).href
-const gigalithSprite = new URL('../assets/pokemon/Gigalith.png', import.meta.url).href
-const geodudeSprite = new URL('../assets/pokemon/Geodude.png', import.meta.url).href
-//ground team sprites
-const rhyperiorSprite = new URL('../assets/pokemon/Rhyperior.png', import.meta.url).href
-const excadrillSprite = new URL('../assets/pokemon/Excadrill.png', import.meta.url).href
-const SandslashSprite = new URL('../assets/pokemon/Sandslash.png', import.meta.url).href
-const mudsdaleSprite = new URL('../assets/pokemon/Mudsdale.png', import.meta.url).href
-const HippowdonSprite = new URL('../assets/pokemon/Hippowdon.png', import.meta.url).href
-const CuboneSprite = new URL('../assets/pokemon/Cubone.png', import.meta.url).href
-//flying team sprites
-const CorviknightSprite = new URL('../assets/pokemon/Corviknight.png', import.meta.url).href
-const BombirdierSprite = new URL('../assets/pokemon/Bombirdier.png', import.meta.url).href
-const NoctowlSprite = new URL('../assets/pokemon/Noctowl.png', import.meta.url).href
-const FarfetchSprite = new URL('../assets/pokemon/Farfetch.png', import.meta.url).href
-const BraviarySprite = new URL('../assets/pokemon/Braviary.png', import.meta.url).href
-const pidgeSprite = new URL('../assets/pokemon/Pidgey.png', import.meta.url).href
-//psychic team sprites
-const alakazamSprite = new URL('../assets/pokemon/Alakazam.png', import.meta.url).href
-const GothitelleSprite = new URL('../assets/pokemon/Gothitelle.png', import.meta.url).href
-const MewtwoSprite = new URL('../assets/pokemon/Mewtwo.png', import.meta.url).href
-const GrumpigSprite = new URL('../assets/pokemon/Grumpig.png', import.meta.url).href
-const BeheeyemSprite = new URL('../assets/pokemon/Beheeyem.png', import.meta.url).href
-const SolosisSprite = new URL('../assets/pokemon/Solosis.png', import.meta.url).href
-//ghost team sprites
-const DusknoirSprite = new URL('../assets/pokemon/Dusknoir.png', import.meta.url).href
-const DrifblimSprite = new URL('../assets/pokemon/Drifblim.png', import.meta.url).href
-const mismagiusSprite = new URL('../assets/pokemon/Mismagius.png', import.meta.url).href
-const SpectrierSprite = new URL('../assets/pokemon/Spectrier.png', import.meta.url).href
-const CofagrigusSprite = new URL('../assets/pokemon/Cofagrigus.png', import.meta.url).href
-const gastlySprite = new URL('../assets/pokemon/Gastly.png', import.meta.url).href
-//dark team sprites
-const darkraiSprite = new URL('../assets/pokemon/Darkrai.png', import.meta.url).href
-const zoroarkSprite = new URL('../assets/pokemon/Zoroark.png', import.meta.url).href
-const weavileSprite = new URL('../assets/pokemon/Weavile.png', import.meta.url).href
-const absolSprite = new URL('../assets/pokemon/Absol.png', import.meta.url).href
-const houndoomSprite = new URL('../assets/pokemon/Houndoom.png', import.meta.url).href
-const purrloinSprite = new URL('../assets/pokemon/Purrloin.png', import.meta.url).href
-
-//steel team sprites
-const aggronSprite = new URL('../assets/pokemon/Aggron.png', import.meta.url).href
-const registeelSprite = new URL('../assets/pokemon/Registeel.png', import.meta.url).href
-const bisharpSprite = new URL('../assets/pokemon/Bisharp.png', import.meta.url).href
-const metagrossSprite = new URL('../assets/pokemon/Metagross.png', import.meta.url).href
-const steelixSprite = new URL('../assets/pokemon/Steelix.png', import.meta.url).href
-const bronzorSprite = new URL('../assets/pokemon/Bronzor.png', import.meta.url).href
-
-//dragon team sprites
-const garchompSprite = new URL('../assets/pokemon/Garchomp.png', import.meta.url).href
-const goodraSprite = new URL('../assets/pokemon/Goodra.png', import.meta.url).href
-const haxorusSprite = new URL('../assets/pokemon/Haxorus.png', import.meta.url).href
-const kommooSprite = new URL('../assets/pokemon/Kommo-o.png', import.meta.url).href
-const druddigonSprite = new URL('../assets/pokemon/Druddigon.png', import.meta.url).href
-const bagonSprite = new URL('../assets/pokemon/Bagon.png', import.meta.url).href
-
-//fairy team sprites
-const mimeSprite = new URL('../assets/pokemon/Mr-Mime.png', import.meta.url).href
-const gardevoirSprite = new URL('../assets/pokemon/Gardevoir.png', import.meta.url).href
-const clefableSprite = new URL('../assets/pokemon/Clefable.png', import.meta.url).href
-const sylveonSprite = new URL('../assets/pokemon/Sylveon.png', import.meta.url).href
-const wigglytuffSprite = new URL('../assets/pokemon/Wigglytuff.png', import.meta.url).href
-const swirlixSprite = new URL('../assets/pokemon/Swirlix.png', import.meta.url).href
-//bug team sprites
-const golisopodSprite = new URL('../assets/pokemon/Golisopod.png', import.meta.url).href
-const vespiquenSprite = new URL('../assets/pokemon/Vespiquen.png', import.meta.url).href
-const scizorSprite = new URL('../assets/pokemon/Scizor.png', import.meta.url).href
-const ariadosSprite = new URL('../assets/pokemon/Ariados.png', import.meta.url).href
-const durantSprite = new URL('../assets/pokemon/Durant.png', import.meta.url).href
-const joltikSprite = new URL('../assets/pokemon/Joltik.png', import.meta.url).href
-//fighting team sprites
-const annihilapeSprite = new URL('../assets/pokemon/Annihilape.png', import.meta.url).href
-const mienshaoSprite = new URL('../assets/pokemon/Mienshao.png', import.meta.url).href
-const sawkSprite = new URL('../assets/pokemon/Sawk.png', import.meta.url).href
-const lucarioSprite = new URL('../assets/pokemon/Lucario.png', import.meta.url).href
-const conkeldurrSprite = new URL('../assets/pokemon/Conkeldurr.png', import.meta.url).href
-const machopSprite = new URL('../assets/pokemon/Machop.png', import.meta.url).href
-
-//poison team sprites
-const nidokingSprite = new URL('../assets/pokemon/Nidoking.png', import.meta.url).href
-const nidoqueenSprite = new URL('../assets/pokemon/Nidoqueen.png', import.meta.url).href
-const drapionSprite = new URL('../assets/pokemon/Drapion.png', import.meta.url).href
-const toxicroakSprite = new URL('../assets/pokemon/Toxicroak.png', import.meta.url).href
-const garbodorSprite = new URL('../assets/pokemon/Garbodor.png', import.meta.url).href
-const grimerSprite = new URL('../assets/pokemon/Grimer.png', import.meta.url).href
-//normal team sprites
-const slakingSprite = new URL('../assets/pokemon/Slaking.png', import.meta.url).href
-const lopunnySprite = new URL('../assets/pokemon/Lopunny.png', import.meta.url).href
-const ursaringSprite = new URL('../assets/pokemon/Ursaring.png', import.meta.url).href
-const delcattySprite = new URL('../assets/pokemon/Delcatty.png', import.meta.url).href
-const snorlaxSprite = new URL('../assets/pokemon/Snorlax.png', import.meta.url).href
-const eeveeSprite = new URL('../assets/pokemon/Eevee.png', import.meta.url).href
+const sprite = (fileName: string) =>
+  new URL(`../assets/pokemon/${fileName}.png`, import.meta.url).href
 
 const spriteManifest: Partial<
   Record<
@@ -163,170 +34,170 @@ const spriteManifest: Partial<
   >
 > = {
   fire: {
-    king: { image: charizardSprite, species: 'Charizard' },
-    queen: { image: delphoxSprite, species: 'Delphox' },
-    bishop: { image: blazikenSprite, species: 'Blaziken' },
-    knight: { image: infernapeSprite, species: 'Infernape' },
-    rook: { image: emboarSprite, species: 'Emboar' },
-    pawn: { image: growlitheSprite, species: 'Growlithe' },
+    king: { image: sprite('Charizard'), species: 'Charizard' },
+    queen: { image: sprite('Delphox'), species: 'Delphox' },
+    bishop: { image: sprite('Blaziken'), species: 'Blaziken' },
+    knight: { image: sprite('Infernape'), species: 'Infernape' },
+    rook: { image: sprite('Emboar'), species: 'Emboar' },
+    pawn: { image: sprite('Growlithe'), species: 'Growlithe' },
   },
   water: {
-    king: { image: blastoiseSprite, species: 'Blastoise' },
-    queen: { image: primarinaSprite, species: 'Primarina' },
-    bishop: { image: greninjaSprite, species: 'Greninja' },
-    knight: { image: feraligatrSprite, species: 'Feraligatr' },
-    rook: { image: empoleonSprite, species: 'Empoleon' },
-    pawn: { image: marillSprite, species: 'Marill' },
+    king: { image: sprite('Blastoise'), species: 'Blastoise' },
+    queen: { image: sprite('Primarina'), species: 'Primarina' },
+    bishop: { image: sprite('Greninja'), species: 'Greninja' },
+    knight: { image: sprite('Feraligatr'), species: 'Feraligatr' },
+    rook: { image: sprite('Empoleon'), species: 'Empoleon' },
+    pawn: { image: sprite('Marill'), species: 'Marill' },
   },
   grass: {
-    king: { image: venusaurSprite, species: 'Venusaur' },
-    queen: { image: meganiumSprite, species: 'Meganium' },
-    bishop: { image: sceptileSprite, species: 'Sceptile' },
-    knight: { image: gogoatSprite, species: 'Gogoat' },
-    rook: { image: cacturneSprite, species: 'Cacturne' },
-    pawn: { image: shroomishSprite, species: 'Shroomish' },
+    king: { image: sprite('Venusaur'), species: 'Venusaur' },
+    queen: { image: sprite('Meganium'), species: 'Meganium' },
+    bishop: { image: sprite('Sceptile'), species: 'Sceptile' },
+    knight: { image: sprite('Gogoat'), species: 'Gogoat' },
+    rook: { image: sprite('Cacturne'), species: 'Cacturne' },
+    pawn: { image: sprite('Shroomish'), species: 'Shroomish' },
   },
   electric: {
-    king: { image: electivireSprite, species: 'Electivire' },
-    queen: { image: zeraoraSprite, species: 'Zeraora' },
-    bishop: { image: eelektrossSprite, species: 'Eelektross' },
-    knight: { image: jolteonSprite, species: 'Jolteon' },
-    rook: { image: ampharosSprite, species: 'Ampharos' },
-    pawn: { image: pichuSprite, species: 'Pichu' },
+    king: { image: sprite('Electivire'), species: 'Electivire' },
+    queen: { image: sprite('Zeraora'), species: 'Zeraora' },
+    bishop: { image: sprite('Eelektross'), species: 'Eelektross' },
+    knight: { image: sprite('Jolteon'), species: 'Jolteon' },
+    rook: { image: sprite('Ampharos'), species: 'Ampharos' },
+    pawn: { image: sprite('Pichu'), species: 'Pichu' },
   },
   ice: {
-    king: { image: bearticSprite, species: 'Beartic' },
-    queen: { image: regiceSprite, species: 'Regice' },
-    bishop: { image: glalieSprite, species: 'Glalie' },
-    knight: { image: glastrierSprite, species: 'Glastrier' },
-    rook: { image: avaluggSprite, species: 'Avalugg' },
-    pawn: { image: vanilliteSprite, species: 'Vanillite' },
+    king: { image: sprite('Beartic'), species: 'Beartic' },
+    queen: { image: sprite('Regice'), species: 'Regice' },
+    bishop: { image: sprite('Glalie'), species: 'Glalie' },
+    knight: { image: sprite('Glastrier'), species: 'Glastrier' },
+    rook: { image: sprite('Avalugg'), species: 'Avalugg' },
+    pawn: { image: sprite('Vanillite'), species: 'Vanillite' },
   },
   rock: {
-    king: { image: TyranitarSprite, species: 'Tyranitar' },
-    queen: { image: RegirockSprite, species: 'Regirock' },
-    bishop: { image: sudowoodoSprite, species: 'Sudowoodo' },
-    knight: { image: lycanrocSprite, species: 'Lycanroc' },
-    rook: { image: gigalithSprite, species: 'Gigalith' },
-    pawn: { image: geodudeSprite, species: 'Geodude' },
+    king: { image: sprite('Tyranitar'), species: 'Tyranitar' },
+    queen: { image: sprite('Regirock'), species: 'Regirock' },
+    bishop: { image: sprite('Sudowoodo'), species: 'Sudowoodo' },
+    knight: { image: sprite('Lycanroc'), species: 'Lycanroc' },
+    rook: { image: sprite('Gigalith'), species: 'Gigalith' },
+    pawn: { image: sprite('Geodude'), species: 'Geodude' },
   },
   ground: {
-    king: { image: rhyperiorSprite, species: 'Rhyperior' },
-    queen: { image: excadrillSprite, species: 'Excadrill' },
-    bishop: { image: SandslashSprite, species: 'Sandslash' },
-    knight: { image: mudsdaleSprite, species: 'Mudsdale' },
-    rook: { image: HippowdonSprite, species: 'Hippowdon' },
-    pawn: { image: CuboneSprite, species: 'Cubone' },
+    king: { image: sprite('Rhyperior'), species: 'Rhyperior' },
+    queen: { image: sprite('Excadrill'), species: 'Excadrill' },
+    bishop: { image: sprite('Sandslash'), species: 'Sandslash' },
+    knight: { image: sprite('Mudsdale'), species: 'Mudsdale' },
+    rook: { image: sprite('Hippowdon'), species: 'Hippowdon' },
+    pawn: { image: sprite('Cubone'), species: 'Cubone' },
   },
   flying: {
-    king: { image: CorviknightSprite, species: 'Corviknight' },
-    queen: { image: BombirdierSprite, species: 'Bombirdier' },
-    bishop: { image: NoctowlSprite, species: 'Noctowl' },
-    knight: { image: FarfetchSprite, species: 'Farfetch' },
-    rook: { image: BraviarySprite, species: 'Braviary' },
-    pawn: { image: pidgeSprite, species: 'Pidgey' },
+    king: { image: sprite('Corviknight'), species: 'Corviknight' },
+    queen: { image: sprite('Bombirdier'), species: 'Bombirdier' },
+    bishop: { image: sprite('Noctowl'), species: 'Noctowl' },
+    knight: { image: sprite('Farfetch'), species: 'Farfetch' },
+    rook: { image: sprite('Braviary'), species: 'Braviary' },
+    pawn: { image: sprite('Pidgey'), species: 'Pidgey' },
   },
   psychic: {
-    bishop: { image: alakazamSprite, species: 'Alakazam' },
-    queen: { image: GothitelleSprite, species: 'Gothitelle' },
-    king: { image: MewtwoSprite, species: 'Mewtwo' },
-    knight: { image: GrumpigSprite, species: 'Grumpig' },
-    rook: { image: BeheeyemSprite, species: 'Beheeyem' },
-    pawn: { image: SolosisSprite, species: 'Solosis' },
+    bishop: { image: sprite('Alakazam'), species: 'Alakazam' },
+    queen: { image: sprite('Gothitelle'), species: 'Gothitelle' },
+    king: { image: sprite('Mewtwo'), species: 'Mewtwo' },
+    knight: { image: sprite('Grumpig'), species: 'Grumpig' },
+    rook: { image: sprite('Beheeyem'), species: 'Beheeyem' },
+    pawn: { image: sprite('Solosis'), species: 'Solosis' },
   },
   ghost: {
-    king: { image: DusknoirSprite, species: 'Dusknoir' },
-    bishop: { image: DrifblimSprite, species: 'Drifblim' },
-    queen: { image: mismagiusSprite, species: 'Mismagius' },
-    knight: { image: SpectrierSprite, species: 'Spectrier' },
-    rook: { image: CofagrigusSprite, species: 'Cofagrigus' },
-    pawn: { image: gastlySprite, species: 'Gastly' },
+    king: { image: sprite('Dusknoir'), species: 'Dusknoir' },
+    bishop: { image: sprite('Drifblim'), species: 'Drifblim' },
+    queen: { image: sprite('Mismagius'), species: 'Mismagius' },
+    knight: { image: sprite('Spectrier'), species: 'Spectrier' },
+    rook: { image: sprite('Cofagrigus'), species: 'Cofagrigus' },
+    pawn: { image: sprite('Gastly'), species: 'Gastly' },
   },
   dark: {
-    king: { image: darkraiSprite, species: 'Darkrai' },
-    queen: { image: zoroarkSprite, species: 'Zoroark' },
-    bishop: { image: weavileSprite, species: 'Weavile' },
-    knight: { image: absolSprite, species: 'Absol' },
-    rook: { image: houndoomSprite, species: 'Houndoom' },
-    pawn: { image: purrloinSprite, species: 'Purrloin' },
+    king: { image: sprite('Darkrai'), species: 'Darkrai' },
+    queen: { image: sprite('Zoroark'), species: 'Zoroark' },
+    bishop: { image: sprite('Weavile'), species: 'Weavile' },
+    knight: { image: sprite('Absol'), species: 'Absol' },
+    rook: { image: sprite('Houndoom'), species: 'Houndoom' },
+    pawn: { image: sprite('Purrloin'), species: 'Purrloin' },
   },
   steel: {
-    king: { image: aggronSprite, species: 'Aggron' },
-    queen: { image: registeelSprite, species: 'Registeel' },
-    bishop: { image: bisharpSprite, species: 'Bisharp' },
-    knight: { image: metagrossSprite, species: 'Metagross' },
-    rook: { image: steelixSprite, species: 'Steelix' },
-    pawn: { image: bronzorSprite, species: 'Bronzor' },
+    king: { image: sprite('Aggron'), species: 'Aggron' },
+    queen: { image: sprite('Registeel'), species: 'Registeel' },
+    bishop: { image: sprite('Bisharp'), species: 'Bisharp' },
+    knight: { image: sprite('Metagross'), species: 'Metagross' },
+    rook: { image: sprite('Steelix'), species: 'Steelix' },
+    pawn: { image: sprite('Bronzor'), species: 'Bronzor' },
   },
   dragon: {
-    king: { image: garchompSprite, species: 'Garchomp' },
-    queen: { image: goodraSprite, species: 'Goodra' },
-    bishop: { image: haxorusSprite, species: 'Haxorus' },
-    knight: { image: kommooSprite, species: 'Kommo-o' },
-    rook: { image: druddigonSprite, species: 'Druddigon' },
-    pawn: { image: bagonSprite, species: 'Bagon' },
+    king: { image: sprite('Garchomp'), species: 'Garchomp' },
+    queen: { image: sprite('Goodra'), species: 'Goodra' },
+    bishop: { image: sprite('Haxorus'), species: 'Haxorus' },
+    knight: { image: sprite('Kommo'), species: 'Kommo-o' },
+    rook: { image: sprite('Druddigon'), species: 'Druddigon' },
+    pawn: { image: sprite('Bagon'), species: 'Bagon' },
   },
   fairy: {
-    king: { image: mimeSprite, species: 'Mime' },
-    queen: { image: gardevoirSprite, species: 'Gardevoir' },
-    bishop: { image: clefableSprite, species: 'Clefable' },
-    knight: { image: sylveonSprite, species: 'Sylveon' },
-    rook: { image: wigglytuffSprite, species: 'Wigglytuff' },
-    pawn: { image: swirlixSprite, species: 'Swirlix' },
+    king: { image: sprite('Mime'), species: 'Mime' },
+    queen: { image: sprite('Gardevoir'), species: 'Gardevoir' },
+    bishop: { image: sprite('Clefable'), species: 'Clefable' },
+    knight: { image: sprite('Sylveon'), species: 'Sylveon' },
+    rook: { image: sprite('Wigglytuff'), species: 'Wigglytuff' },
+    pawn: { image: sprite('Swirlix'), species: 'Swirlix' },
   },
   bug: {
-    king: { image: golisopodSprite, species: 'Golisopod' },
-    queen: { image: vespiquenSprite, species: 'Vespiquen' },
-    bishop: { image: scizorSprite, species: 'Scizor' },
-    knight: { image: ariadosSprite, species: 'Ariados' },
-    rook: { image: durantSprite, species: 'Durant' },
-    pawn: { image: joltikSprite, species: 'Joltik' },
+    king: { image: sprite('Golisopod'), species: 'Golisopod' },
+    queen: { image: sprite('Vespiquen'), species: 'Vespiquen' },
+    bishop: { image: sprite('Scizor'), species: 'Scizor' },
+    knight: { image: sprite('Ariados'), species: 'Ariados' },
+    rook: { image: sprite('Durant'), species: 'Durant' },
+    pawn: { image: sprite('Joltik'), species: 'Joltik' },
   },
   fighting: {
-    king: { image: annihilapeSprite, species: 'Annihilape' },
-    queen: { image: mienshaoSprite, species: 'Mienshao' },
-    bishop: { image: sawkSprite, species: 'Sawk' },
-    knight: { image: lucarioSprite, species: 'Lucario' },
-    rook: { image: conkeldurrSprite, species: 'Conkeldurr' },
-    pawn: { image: machopSprite, species: 'Machop' },
+    king: { image: sprite('Annihilape'), species: 'Annihilape' },
+    queen: { image: sprite('Mienshao'), species: 'Mienshao' },
+    bishop: { image: sprite('Sawk'), species: 'Sawk' },
+    knight: { image: sprite('Lucario'), species: 'Lucario' },
+    rook: { image: sprite('Conkeldurr'), species: 'Conkeldurr' },
+    pawn: { image: sprite('Machop'), species: 'Machop' },
   },
   poison: {
-    king: { image: nidokingSprite, species: 'Nidoking' },
-    queen: { image: nidoqueenSprite, species: 'Nidoqueen' },
-    bishop: { image: drapionSprite, species: 'Drapion' },
-    knight: { image: toxicroakSprite, species: 'Toxicroak' },
-    rook: { image: garbodorSprite, species: 'Garbodor' },
-    pawn: { image: grimerSprite, species: 'Grimer' },
+    king: { image: sprite('Nidoking'), species: 'Nidoking' },
+    queen: { image: sprite('Nidoqueen'), species: 'Nidoqueen' },
+    bishop: { image: sprite('Drapion'), species: 'Drapion' },
+    knight: { image: sprite('Toxicroak'), species: 'Toxicroak' },
+    rook: { image: sprite('Garbodor'), species: 'Garbodor' },
+    pawn: { image: sprite('Grimer'), species: 'Grimer' },
   },
   normal: {
-    king: { image: slakingSprite, species: 'Slaking' },
-    queen: { image: lopunnySprite, species: 'Lopunny' },
-    bishop: { image: ursaringSprite, species: 'Ursaring' },
-    knight: { image: delcattySprite, species: 'Delcatty' },
-    rook: { image: snorlaxSprite, species: 'Snorlax' },
-    pawn: { image: eeveeSprite, species: 'Eevee' },
+    king: { image: sprite('Slaking'), species: 'Slaking' },
+    queen: { image: sprite('Lopunny'), species: 'Lopunny' },
+    bishop: { image: sprite('Ursaring'), species: 'Ursaring' },
+    knight: { image: sprite('Delcatty'), species: 'Delcatty' },
+    rook: { image: sprite('Snorlax'), species: 'Snorlax' },
+    pawn: { image: sprite('Eevee'), species: 'Eevee' },
   },
 }
 
 export const teamTheme: Record<Element, { label: string; color: string; pawnIcon: string }> = {
-  fire: { label: 'Fire', color: '#f97316', pawnIcon: growlitheSprite },
-  water: { label: 'Water', color: '#38bdf8', pawnIcon: marillSprite },
-  grass: { label: 'Grass', color: '#4ade80', pawnIcon: shroomishSprite },
-  electric: { label: 'Electric', color: '#fde047', pawnIcon: pichuSprite },
-  ice: { label: 'Ice', color: '#7dd3fc', pawnIcon: vanilliteSprite },
-  rock: { label: 'Rock', color: '#fbbf24', pawnIcon: geodudeSprite },
-  ground: { label: 'Ground', color: '#fbb888', pawnIcon: CuboneSprite },
-  flying: { label: 'Flying', color: '#bae6fd', pawnIcon: pidgeSprite },
-  psychic: { label: 'Psychic', color: '#EF4179', pawnIcon: SolosisSprite },
-  ghost: { label: 'Ghost', color: '#c084fc', pawnIcon: gastlySprite },
-  dark: { label: 'Dark', color: '#475569', pawnIcon: purrloinSprite },
-  steel: { label: 'Steel', color: '#94a3b8', pawnIcon: bronzorSprite },
-  dragon: { label: 'Dragon', color: '#5060E1', pawnIcon: bagonSprite },
-  fairy: { label: 'Fairy', color: '#f9a8d4', pawnIcon: swirlixSprite },
-  bug: { label: 'Bug', color: '#bef264', pawnIcon: joltikSprite },
-  fighting: { label: 'Fighting', color: '#ef4444', pawnIcon: machopSprite },
-  poison: { label: 'Poison', color: '#a855f7', pawnIcon: grimerSprite },
-  normal: { label: 'Normal', color: '#e2e8f0', pawnIcon: eeveeSprite },
+  fire: { label: 'Fire', color: '#f97316', pawnIcon: sprite('Growlithe') },
+  water: { label: 'Water', color: '#38bdf8', pawnIcon: sprite('Marill') },
+  grass: { label: 'Grass', color: '#4ade80', pawnIcon: sprite('Shroomish') },
+  electric: { label: 'Electric', color: '#fde047', pawnIcon: sprite('Pichu') },
+  ice: { label: 'Ice', color: '#7dd3fc', pawnIcon: sprite('Vanillite') },
+  rock: { label: 'Rock', color: '#fbbf24', pawnIcon: sprite('Geodude') },
+  ground: { label: 'Ground', color: '#fbb888', pawnIcon: sprite('Cubone') },
+  flying: { label: 'Flying', color: '#bae6fd', pawnIcon: sprite('Pidgey') },
+  psychic: { label: 'Psychic', color: '#EF4179', pawnIcon: sprite('Solosis') },
+  ghost: { label: 'Ghost', color: '#c084fc', pawnIcon: sprite('Gastly') },
+  dark: { label: 'Dark', color: '#475569', pawnIcon: sprite('Purrloin') },
+  steel: { label: 'Steel', color: '#94a3b8', pawnIcon: sprite('Bronzor') },
+  dragon: { label: 'Dragon', color: '#5060E1', pawnIcon: sprite('Bagon') },
+  fairy: { label: 'Fairy', color: '#f9a8d4', pawnIcon: sprite('Swirlix') },
+  bug: { label: 'Bug', color: '#bef264', pawnIcon: sprite('Joltik') },
+  fighting: { label: 'Fighting', color: '#ef4444', pawnIcon: sprite('Machop') },
+  poison: { label: 'Poison', color: '#a855f7', pawnIcon: sprite('Grimer') },
+  normal: { label: 'Normal', color: '#e2e8f0', pawnIcon: sprite('Eevee') },
 }
 
 export const availableTeams = Object.keys(teamTheme) as Element[]

@@ -103,7 +103,7 @@ const singleStepMoves: MoveGenerator = ({ board, from, piece }) => {
   return moves
 }
 
-const pawnMoves: MoveGenerator = ({ board, from, piece }) => {
+const pawnMoves: MoveGenerator = ({ board, from, piece, enPassantTarget }) => {
   const moves: Square[] = []
   const { fileIndex, rankIndex } = squareToCoords(from)
   const direction = piece.side === 'south' ? 1 : -1
@@ -131,6 +131,15 @@ const pawnMoves: MoveGenerator = ({ board, from, piece }) => {
     }
   })
 
+  if (enPassantTarget) {
+    captureVectors.forEach(([fileStep, rankStep]) => {
+      const target = coordsToSquare(fileIndex + fileStep, rankIndex + rankStep)
+      if (target === enPassantTarget && !board[target]) {
+        moves.push(target)
+      }
+    })
+  }
+
   return moves
 }
 
@@ -153,7 +162,14 @@ export function getPseudoLegalMoves(args: MoveGeneratorArgs) {
 
 export function getLegalMoves(args: MoveGeneratorArgs & { board: BoardState }) {
   let legalMoves = getPseudoLegalMoves(args).filter(
-    (targetSquare) => !wouldExposeKing(args.board, args.from, targetSquare, args.piece),
+    (targetSquare) =>
+      !wouldExposeKing(
+        args.board,
+        args.from,
+        targetSquare,
+        args.piece,
+        args.enPassantTarget ?? null,
+      ),
   )
 
   if (args.piece.type === 'king') {
@@ -163,11 +179,34 @@ export function getLegalMoves(args: MoveGeneratorArgs & { board: BoardState }) {
   return legalMoves
 }
 
-function wouldExposeKing(board: BoardState, from: Square, to: Square, movingPiece: Piece) {
+function wouldExposeKing(
+  board: BoardState,
+  from: Square,
+  to: Square,
+  movingPiece: Piece,
+  enPassantTarget: Square | null,
+) {
   const nextBoard: BoardState = { ...board }
   const updatedPiece: Piece = { ...movingPiece, hasMoved: true }
   nextBoard[from] = null
   nextBoard[to] = updatedPiece
+
+  if (
+    movingPiece.type === 'pawn' &&
+    enPassantTarget &&
+    to === enPassantTarget &&
+    !board[to] &&
+    squareToCoords(from).fileIndex !== squareToCoords(to).fileIndex
+  ) {
+    const { fileIndex, rankIndex } = squareToCoords(to)
+    const captureSquare = coordsToSquare(
+      fileIndex,
+      rankIndex - (movingPiece.side === 'south' ? 1 : -1),
+    )
+    if (captureSquare) {
+      nextBoard[captureSquare] = null
+    }
+  }
 
   const kingSquare =
     movingPiece.type === 'king' ? to : findKingSquare(nextBoard, movingPiece.element)
