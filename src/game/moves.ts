@@ -5,6 +5,7 @@ interface MoveGeneratorArgs {
   board: BoardState
   from: Square
   piece: Piece
+  enPassantTarget?: Square | null
 }
 
 type MoveGenerator = (args: MoveGeneratorArgs) => Square[]
@@ -308,10 +309,14 @@ export function isElementInCheck(board: BoardState, element: Element): boolean {
   return isSquareUnderAttack(board, kingSquare, opponent)
 }
 
-export function hasAnyLegalMoves(board: BoardState, element: Element): boolean {
+export function hasAnyLegalMoves(
+  board: BoardState,
+  element: Element,
+  enPassantTarget: Square | null,
+): boolean {
   for (const [square, piece] of Object.entries(board) as [Square, Piece | null][]) {
     if (!piece || piece.element !== element) continue
-    const moves = getLegalMoves({ board, piece, from: square })
+    const moves = getLegalMoves({ board, piece, from: square, enPassantTarget })
     if (moves.length) {
       return true
     }

@@ -7,8 +7,8 @@ import {
   squareToCoords,
 } from './board'
 import { getLegalMoves, hasAnyLegalMoves, isElementInCheck } from './moves'
-import { Element, MoveRecord, Piece, Square } from '../types/chess'
-import { availableTeams } from '../data/pokemon'
+import { Element, MoveRecord, Piece, PieceType, Side, Square } from '../types/chess'
+import { availableTeams, getPieceTemplate } from '../data/pokemon'
 
 export interface GameState {
   board: BoardState
@@ -24,7 +24,17 @@ export interface GameState {
   selectTeam: (team: Element) => void
   changeTeams: () => void
   reset: () => void
+  pendingPromotion: PromotionContext | null
+  promotePawn: (type: PieceType) => void
   handleSquareClick: (square: Square) => void
+}
+
+interface PromotionContext {
+  square: Square
+  element: Element
+  side: Side
+  opponent: Element
+  enPassantTarget: Square | null
 }
 
 export function useGameState(): GameState {
@@ -37,6 +47,8 @@ export function useGameState(): GameState {
   const [winner, setWinner] = useState<Element | null>(null)
   const [playerTeam, setPlayerTeam] = useState<Element | null>(null)
   const [opponentTeam, setOpponentTeam] = useState<Element | null>(null)
+  const [enPassantTarget, setEnPassantTarget] = useState<Square | null>(null)
+  const [pendingPromotion, setPendingPromotion] = useState<PromotionContext | null>(null)
 
   const gameReady = Boolean(playerTeam && opponentTeam)
   const activeElement = turnOrder[activeIndex] ?? null
@@ -69,6 +81,8 @@ export function useGameState(): GameState {
     setLegalMoves([])
     setMoveHistory([])
     setWinner(null)
+     setEnPassantTarget(null)
+     setPendingPromotion(null)
   }
 
   const changeTeams = () => {
@@ -81,6 +95,8 @@ export function useGameState(): GameState {
     setLegalMoves([])
     setMoveHistory([])
     setWinner(null)
+    setEnPassantTarget(null)
+    setPendingPromotion(null)
   }
 
   const reset = () => {
@@ -94,6 +110,8 @@ export function useGameState(): GameState {
     setLegalMoves([])
     setMoveHistory([])
     setWinner(null)
+    setEnPassantTarget(null)
+    setPendingPromotion(null)
   }
 
   const clearSelection = () => {
@@ -101,22 +119,63 @@ export function useGameState(): GameState {
     setLegalMoves([])
   }
 
+  const finalizeMove = (
+    nextBoard: BoardState,
+    movingPiece: Piece,
+    opponent: Element,
+    nextTarget: Square | null,
+  ) => {
+    setEnPassantTarget(nextTarget)
+    const opponentHasMoves = hasAnyLegalMoves(nextBoard, opponent, nextTarget)
+    const opponentInCheck = isElementInCheck(nextBoard, opponent)
+
+    if (!opponentHasMoves && opponentInCheck) {
+      setWinner(movingPiece.element)
+      clearSelection()
+      return
+    }
+
+    setActiveIndex((current) => (current + 1) % turnOrder.length)
+    clearSelection()
+  }
+
   const movePiece = (from: Square, to: Square) => {
-    if (!gameReady || !turnOrder.length || winner) return
+    if (!gameReady || !turnOrder.length || winner || pendingPromotion) return
 
     const piece = board[from]
     if (!piece) return
 
-    const captured = board[to] ?? undefined
+    const fromCoords = squareToCoords(from)
+    const toCoords = squareToCoords(to)
+
+    let captured = board[to] ?? undefined
     const updatedPiece: Piece = { ...piece, hasMoved: true }
 
     const nextBoard: BoardState = { ...board }
     nextBoard[from] = null
+
+    if (
+      piece.type === 'pawn' &&
+      enPassantTarget &&
+      to === enPassantTarget &&
+      !captured &&
+      fromCoords.fileIndex !== toCoords.fileIndex
+    ) {
+      const captureSquare = coordsToSquare(
+        toCoords.fileIndex,
+        toCoords.rankIndex - (piece.side === 'south' ? 1 : -1),
+      )
+      if (captureSquare) {
+        captured = board[captureSquare] ?? undefined
+        nextBoard[captureSquare] = null
+      }
+    }
+
     nextBoard[to] = updatedPiece
 
     if (piece.type === 'king') {
-      const { fileIndex: fromFile, rankIndex } = squareToCoords(from)
-      const { fileIndex: toFile } = squareToCoords(to)
+      const { fileIndex: fromFile, rankIndex } = fromCoords
+      const { fileIndex: toFile } = toCoords
       if (Math.abs(toFile - fromFile) === 2) {
         const rookFromFile = toFile > fromFile ? toFile + 1 : toFile - 2
         const rookToFile = toFile > fromFile ? toFile - 1 : toFile + 1
@@ -132,6 +191,18 @@ export function useGameState(): GameState {
       }
     }
 
+    let nextEnPassantTarget: Square | null = null
+    if (
+      piece.type === 'pawn' &&
+      Math.abs(toCoords.rankIndex - fromCoords.rankIndex) === 2 &&
+      fromCoords.fileIndex === toCoords.fileIndex
+    ) {
+      nextEnPassantTarget = coordsToSquare(
+        fromCoords.fileIndex,
+        fromCoords.rankIndex + (piece.side === 'south' ? 1 : -1),
+      )
+    }
+
     setBoard(nextBoard)
     setMoveHistory((current) => [...current, { from, to, piece: updatedPiece, captured }])
 
@@ -139,25 +210,32 @@ export function useGameState(): GameState {
     if (capturedKing) {
       setWinner(piece.element)
       clearSelection()
+      setEnPassantTarget(null)
       return
     }
 
     const opponent = turnOrder[(activeIndex + 1) % turnOrder.length]
-    const opponentHasMoves = hasAnyLegalMoves(nextBoard, opponent)
-    const opponentInCheck = isElementInCheck(nextBoard, opponent)
+    const promotionRank = piece.side === 'south' ? 7 : 0
+    const shouldPromote = piece.type === 'pawn' && toCoords.rankIndex === promotionRank
 
-    if (!opponentHasMoves && opponentInCheck) {
-      setWinner(piece.element)
+    if (shouldPromote) {
+      setPendingPromotion({
+        square: to,
+        element: piece.element,
+        side: piece.side,
+        opponent,
+        enPassantTarget: nextEnPassantTarget,
+      })
+      setEnPassantTarget(nextEnPassantTarget)
       clearSelection()
       return
     }
 
-    setActiveIndex((current) => (current + 1) % turnOrder.length)
-    clearSelection()
+    finalizeMove(nextBoard, updatedPiece, opponent, nextEnPassantTarget)
   }
 
   const handleSquareClick = (square: Square) => {
-    if (!gameReady || winner) return
+    if (!gameReady || winner || pendingPromotion) return
 
     const piece = board[square]
 
@@ -179,8 +257,49 @@ export function useGameState(): GameState {
     }
 
     setSelectedSquare(square)
-    const moves = getLegalMoves({ board, piece, from: square })
+    const moves = getLegalMoves({ board, piece, from: square, enPassantTarget })
     setLegalMoves(moves)
+  }
+
+  const promotePawn = (type: PieceType) => {
+    if (!pendingPromotion) return
+    if (type === 'pawn' || type === 'king') return
+
+    const template = getPieceTemplate(pendingPromotion.element, type)
+    const promotedPiece: Piece = {
+      id: `${pendingPromotion.element}-${type}-${Date.now()}`,
+      element: pendingPromotion.element,
+      type,
+      name: template.name,
+      pokemon: template.pokemon,
+      side: pendingPromotion.side,
+      hasMoved: true,
+    }
+
+    setBoard((current) => {
+      const updatedBoard: BoardState = { ...current }
+      updatedBoard[pendingPromotion.square] = promotedPiece
+      finalizeMove(
+        updatedBoard,
+        promotedPiece,
+        pendingPromotion.opponent,
+        pendingPromotion.enPassantTarget,
+      )
+      return updatedBoard
+    })
+
+    setMoveHistory((current) => {
+      if (!current.length) return current
+      const updated = [...current]
+      const lastIndex = updated.length - 1
+      updated[lastIndex] = {
+        ...updated[lastIndex],
+        piece: { ...updated[lastIndex].piece, ...promotedPiece },
+      }
+      return updated
+    })
+
+    setPendingPromotion(null)
   }
 
   return {
@@ -197,6 +316,8 @@ export function useGameState(): GameState {
     selectTeam,
     changeTeams,
     reset,
+    pendingPromotion,
+    promotePawn,
     handleSquareClick,
   }
 }

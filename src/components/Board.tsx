@@ -31,8 +31,15 @@ const Board: FC<BoardProps> = ({ board, selectedSquare, legalMoves, onSquareClic
                 onClick={() => onSquareClick(square)}
                 title={piece ? `${piece.name} — ${piece.pokemon.species}` : square}
               >
-                {piece ? (
-                  <div className="piece" style={{ borderColor: teamTheme[piece.element].color }}>
+                {piece && (
+                  <div
+                    className="piece"
+                    style={{
+                      borderColor: teamTheme[piece.element].color,
+                      boxShadow: `0 0 5px ${teamTheme[piece.element].color}`,
+                      backgroundColor: teamTheme[piece.element].color + '50',
+                    }}
+                  >
                     {piece.pokemon.image ? (
                       <div className="piece-content">
                         {isSelected && (
@@ -50,8 +57,6 @@ const Board: FC<BoardProps> = ({ board, selectedSquare, legalMoves, onSquareClic
                       <span className="piece-type-display">{piece.element + ' ' + piece.type}</span>
                     )}
                   </div>
-                ) : (
-                  <span className="square-label">{square}</span>
                 )}
               </button>
             )

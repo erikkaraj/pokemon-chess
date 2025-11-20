@@ -355,6 +355,36 @@
   color: #94a3b8;
 }
 
+.promotion-card {
+  background: #020617;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.promotion-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.promotion-option {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 23, 42, 0.9);
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #f8fafc;
+  cursor: pointer;
+}
+
 @media (max-width: 1000px) {
   .app {
     padding: 1.5rem;

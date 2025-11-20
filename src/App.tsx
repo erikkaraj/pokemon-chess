@@ -1,6 +1,7 @@
 import Board from './components/Board'
 import GameSidebar from './components/GameSidebar'
 import TeamSelector from './components/TeamSelector'
+import PromotionModal from './components/PromotionModal'
 import { useGameState } from './game/useGameState'
 import VictoryModal from './components/VictoryModal'
 import { teamTheme } from './data/pokemon'
@@ -21,6 +22,8 @@ function App() {
     selectTeam,
     changeTeams,
     reset,
+    pendingPromotion,
+    promotePawn,
     handleSquareClick,
   } = useGameState()
 
@@ -65,6 +68,10 @@ function App() {
         </main>
       ) : (
         <TeamSelector onSelect={selectTeam} />
+      )}
+
+      {pendingPromotion && (
+        <PromotionModal element={pendingPromotion.element} onSelect={promotePawn} />
       )}
 
       {winner && <VictoryModal winner={winner} onReset={reset} onChangeTeams={changeTeams} />}

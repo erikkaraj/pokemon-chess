@@ -349,7 +349,22 @@ export function buildTeamRoster(element: Element): PokemonPieceConfig[] {
   })
 }
 
-function createPokemonMetadata(
+export function getPieceTemplate(element: Element, type: PieceType): PokemonPieceConfig {
+  const roster = buildTeamRoster(element)
+  const match = roster.find((config) => config.type === type)
+  if (match) {
+    return match
+  }
+  const fallbackName = `${element}-${type}`
+  return {
+    element,
+    type,
+    name: fallbackName,
+    pokemon: createPokemonMetadata(element, type, fallbackName, 0),
+  }
+}
+
+export function createPokemonMetadata(
   element: Element,
   type: PieceType,
   fallbackName: string,
