@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { BOARD_FILES, BOARD_RANKS } from '../game/board'
 import { BoardState } from '../game/board'
-import { Square } from '../types/chess'
+import { Piece, Square } from '../types/chess'
 import { teamTheme } from '../data/pokemon'
 
 interface BoardProps {
@@ -34,13 +34,20 @@ const Board: FC<BoardProps> = ({ board, selectedSquare, legalMoves, onSquareClic
                 {piece ? (
                   <div className="piece" style={{ borderColor: teamTheme[piece.element].color }}>
                     {piece.pokemon.image ? (
-                      <img
-                        src={piece.pokemon.image}
-                        alt={piece.name}
-                        className={`piece-image ${piece.type === 'pawn' ? 'piece-image--pawn' : ''}`}
-                      />
+                      <div className="piece-content">
+                        {isSelected && (
+                          <span className="piece-label">{formatPieceType(piece.type)}</span>
+                        )}
+                        <img
+                          src={piece.pokemon.image}
+                          alt={piece.name}
+                          className={`piece-image ${piece.type === 'pawn' ? 'piece-image--pawn' : ''} ${
+                            isSelected ? 'piece-image--selected' : ''
+                          }`}
+                        />
+                      </div>
                     ) : (
-                      <span className="piece-icon">{piece.pokemon.icon}</span>
+                      <span className="piece-type-display">{piece.element + ' ' + piece.type}</span>
                     )}
                   </div>
                 ) : (
@@ -56,3 +63,7 @@ const Board: FC<BoardProps> = ({ board, selectedSquare, legalMoves, onSquareClic
 }
 
 export default Board
+
+function formatPieceType(type: Piece['type']) {
+  return type.charAt(0).toUpperCase() + type.slice(1)
+}
